@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import vo.ChatBean;
 
@@ -45,7 +46,7 @@ public class ChatDAO {
 		
 		//현재 게시물 번호(board_num)중 가장 큰 번호를 조회하여
 		//해당 번호 + 1 값을 새글 번호 (num)으로 저장
-    String sql = "SELECT MAX(board_id) FROM chat";
+    String sql = "SELECT MAX(chat_id) FROM chat";
 	try {
 		pstmt = con.prepareStatement(sql);
 		rs= pstmt.executeQuery();
@@ -60,16 +61,16 @@ public class ChatDAO {
 	}
 		
 		try {
-				
-		 sql = "INSERT INTO Chat VALUES (?,?,?,?,?,?)";
+				System.out.println(chatBean.getChat_content());
+		 sql = "INSERT INTO Chat VALUES (?,?,?,?,NOW(),?)";
 	     pstmt = con.prepareStatement(sql);
 					
-		 pstmt.setInt(1, chatBean.getChat_id());
+//		 pstmt.setInt(1, chatBean.getChat_id());
+		 pstmt.setInt(1, num);
 		 pstmt.setString(2, chatBean.getChat_editor_id());
 		 pstmt.setString(3, chatBean.getChat_creator_id());
 		 pstmt.setString(4, chatBean.getChat_content());
-		 pstmt.setTimestamp(5, chatBean.getChat_date());
-		 pstmt.setInt(6, chatBean.getBoard_id());
+		 pstmt.setInt(5, chatBean.getBoard_id());
 				
 		insertCount = pstmt.executeUpdate();
 				
@@ -88,18 +89,27 @@ public class ChatDAO {
 
 //조회수 증가========================================================================
 	
-public int selectListCount() {
-	int listCount = 0;
+public ArrayList<ChatBean> selectListCount(int board_id) {
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
 	
+	ArrayList<ChatBean> list = new ArrayList<ChatBean>();
+	
 	try {
-		String sql = "select count(chat_num) from chat";
+		String sql = "select * from chat where board_id=?";
 		pstmt = con.prepareStatement(sql);
+		pstmt.setInt(1, board_id);
 		rs=pstmt.executeQuery();
 		
-		if(rs.next()) {
-			listCount = rs.getInt(1);
+		while(rs.next()) {
+			ChatBean chatBean = new ChatBean();
+			chatBean.setBoard_id(rs.getInt("board_id"));
+			chatBean.setChat_content(rs.getString("chat_content"));
+			chatBean.setChat_creator_id(rs.getString("chat_creator_id"));
+			chatBean.setChat_editor_id(rs.getString("chat_editor_id"));
+		  //레코드 저장 확인용 코드
+			
+			list.add(chatBean);
 		}
 		
 	} catch (SQLException e) {
@@ -113,7 +123,7 @@ public int selectListCount() {
 	}
 	
 	
-	return listCount;
+	return list;
   }
 
 //==================================================================

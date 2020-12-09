@@ -20,6 +20,8 @@ public class ChatWriteProService {
 		
 		chatDAO.setConnection(con);
 		
+		System.out.println(chatBean.getChat_content());
+		
 		int insertCount = ChatDAO.insertArticle(chatBean);
 		
 		if(insertCount > 0) {

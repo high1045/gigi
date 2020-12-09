@@ -4,14 +4,17 @@ import static db.JdbcUtill.close;
 import static db.JdbcUtill.getConnection;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 
 import dao.ChatDAO;
+import vo.ChatBean;
 
 public class ChetListService {
 
-	public int getListCount() throws Exception {
+	public ArrayList<ChatBean> getListCount(int board_id) throws Exception {
 		
 		int listCount = 0;
+		ArrayList<ChatBean> list = new ArrayList<ChatBean>();
 		
 		// 1(공통). Connection 객체 가져오기
 		Connection con = getConnection();
@@ -24,13 +27,13 @@ public class ChetListService {
 				
 		// 4. BoardDAO 객체의 selectListCount() 메서드 호출하여
 		//    전체 게시물 수 가져오기
-		listCount = chatDAO.selectListCount();
+		list = chatDAO.selectListCount(board_id);
 				
 		// 5(공통). Connection 객체 반환하기
 		close(con);
 				
 		// 6. 전체 게시물 수 리턴
-		return listCount;
+		return list;
 		
 	}
 	

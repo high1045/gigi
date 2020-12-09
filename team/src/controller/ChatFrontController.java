@@ -30,26 +30,23 @@ public class ChatFrontController extends HttpServlet {
     	
     	String commend = request.getServletPath();
     	System.out.println("요청 서블릿 주소 :" + commend);
-    	String chat_creator_id = request.getParameter("chat_creator_id");
-		String chat_editor_id = request.getParameter("chat_editor_id");
-		if(chat_creator_id == null || chat_editor_id.trim().length() == 0){
-	    response.sendRedirect("/chat/Chatting.jsp");
-	   
-	    
-    	
     	
     	Action action = null;
     	
     	ActionForward forward =null;
     	
     	if(commend.equals("/ChatWriteForm.ch")) {
+    		action = new ChatListAction();
     		
-    		forward = new ActionForward();
-    		
-    		forward.setPath("/Chat/ChatWriteForm.jsp");
+    		try {	
+    			forward = action.execute(request,response);
+    		}catch(Exception e) {
+    			e.printStackTrace();
+    		}		
     		
             }else if(commend.equals("/ChatWritePro.ch")) {
     		
+            	System.out.println(request.getParameter("Chat_content"));
     		action = new ChatWriteProAction(); 
     			
     		try {	
@@ -104,7 +101,7 @@ public class ChatFrontController extends HttpServlet {
     			}
     		
     		 }
-    		}
+    		
     		//=========================================================================================
     	
     		}

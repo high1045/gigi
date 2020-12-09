@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.websocket.Session;
 
 import svc.ChetListService;
 import vo.ActionForward;
@@ -17,14 +18,10 @@ public class ChatListAction implements Action {
 		ActionForward forward = null;
 		
 		ChetListService chatListService = new ChetListService();
-		int listCount = chatListService.getListCount();
 		
-		ArrayList<ChatBean> articleList = new ArrayList<ChatBean>();
-		
-	
-		
-		
-		
+		ArrayList<ChatBean> list = new ArrayList<ChatBean>();
+		list = chatListService.getListCount(2);
+		request.setAttribute("list", list);
 		
 		
 		forward = new ActionForward();

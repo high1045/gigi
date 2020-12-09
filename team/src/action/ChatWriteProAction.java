@@ -21,16 +21,20 @@ public class ChatWriteProAction implements Action {
 	public ActionForward execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		System.out.println("ChatWriteProAction!");
 		
+		System.out.println(request.getParameter("Chat_content"));
+		
 		ActionForward forward = null;
 		
 		
 		ChatBean chatBean = new ChatBean();
-		chatBean.setChat_id(Integer.parseInt(request.getParameter("Chat_id")));
-		chatBean.setChat_editor_id(request.getParameter("Chat_editor_id"));
-		chatBean.setChat_creator_id(request.getParameter("Chat_creator_id"));
+//		chatBean.setChat_id(Integer.parseInt(request.getParameter("Chat_id")));
+		chatBean.setChat_editor_id("Chat_editor_id");
+		chatBean.setChat_creator_id("chat_creator_id");
 		chatBean.setChat_content(request.getParameter("Chat_content"));
-		chatBean.setChat_date(new Timestamp(System.currentTimeMillis()));
-		chatBean.setBoard_id(Integer.parseInt(request.getParameter("board_id")));
+//		chatBean.setChat_date(new Timestamp(System.currentTimeMillis()));
+		chatBean.setBoard_id(2);
+		
+		System.out.println(chatBean.getChat_content());
 		
 		ChatWriteProService ChatWriteProService = new ChatWriteProService();
 		boolean isWriteSuccess = ChatWriteProService.registChat(chatBean);
@@ -44,7 +48,7 @@ public class ChatWriteProAction implements Action {
 			out.println("</script>");
 		} else {
 			forward = new ActionForward();
-			forward.setPath("ChatList.ch");
+			forward.setPath("/team/ChatWriteForm.ch");
 			forward.setRedirect(true);
 		}
 		return forward;
